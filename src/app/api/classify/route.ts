@@ -4,9 +4,6 @@ export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
         
-        console.log('📤 Redirecionando para backend Python: https://email-classifier-backend-rxlb.onrender.com/api/classify');
-        console.log('📝 Dados enviados:', body);
-        
         const response = await fetch('https://email-classifier-backend-rxlb.onrender.com/api/classify', {
             method: 'POST',
             headers: {
@@ -15,7 +12,7 @@ export async function POST(request: NextRequest) {
             body: JSON.stringify(body),
         });
 
-        console.log('📥 Resposta do backend:', response.status);
+        console.log('📥 Resposta do backend:', response.status, response.statusText);
 
         if (!response.ok) {
             const errorText = await response.text();
@@ -35,15 +32,19 @@ export async function POST(request: NextRequest) {
         }
 
         const data = await response.json();
-        console.log('✅ Dados recebidos do Python:', data);
         
         return NextResponse.json(data);
 
     } catch (error) {
-        console.error('❌ Erro na API:', error);
+        console.error('❌ Erro na API classify:', error);
+        
+        const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido';
+        const errorStack = error instanceof Error ? error.stack : 'Stack trace não disponível';
+        
+        console.error('❌ Stack trace:', errorStack);
         
         return NextResponse.json(
-            { error: 'Erro interno do servidor' },
+            { error: `Erro interno: ${errorMessage}` },
             { status: 500 }
         );
     }
