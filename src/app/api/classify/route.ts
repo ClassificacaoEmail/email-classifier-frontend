@@ -1,15 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL
-
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
         
-        console.log('📤 Redirecionando para backend Python:', `${BACKEND_URL}/api/classify`);
+        console.log('📤 Redirecionando para backend Python: https://email-classifier-backend-rxlb.onrender.com/api/classify');
         console.log('📝 Dados enviados:', body);
         
-        const response = await fetch(`${BACKEND_URL}/api/classify`, {
+        const response = await fetch('https://email-classifier-backend-rxlb.onrender.com/api/classify', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -43,14 +41,6 @@ export async function POST(request: NextRequest) {
 
     } catch (error) {
         console.error('❌ Erro na API:', error);
-        
-        // Se o backend Python não estiver disponível
-        if (error instanceof TypeError && error.message.includes('fetch')) {
-            return NextResponse.json(
-                { error: 'Backend Python não está disponível. Certifique-se que está rodando na porta 5000.' },
-                { status: 503 }
-            );
-        }
         
         return NextResponse.json(
             { error: 'Erro interno do servidor' },

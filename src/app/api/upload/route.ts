@@ -1,14 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL
-
 export async function POST(request: NextRequest) {
     try {
         const formData = await request.formData();
         
-        console.log('📤 Redirecionando upload para backend Python:', `${BACKEND_URL}/api/upload`);
+        console.log('📤 Redirecionando upload para backend Python: https://email-classifier-backend-rxlb.onrender.com/api/upload');
         
-        const response = await fetch(`${BACKEND_URL}/api/upload`, {
+        const response = await fetch('https://email-classifier-backend-rxlb.onrender.com/api/upload', {
             method: 'POST',
             body: formData,
         });
