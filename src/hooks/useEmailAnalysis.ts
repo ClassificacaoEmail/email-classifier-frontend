@@ -12,13 +12,11 @@ export const useEmailAnalysis = () => {
         try {
             const endpoint = type === 'file' ? '/api/upload' : '/api/analyze';
             
-            // Corrigir o problema dos headers
             const fetchOptions: RequestInit = {
                 method: 'POST',
                 body: type === 'file' ? data : JSON.stringify({ emailText: data }),
             };
 
-            // Só adicionar headers se for text
             if (type === 'text') {
                 fetchOptions.headers = {
                     'Content-Type': 'application/json'

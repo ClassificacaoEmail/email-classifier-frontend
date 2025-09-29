@@ -2,30 +2,22 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
     try {
-        console.log('🔄 Iniciando upload...');
         
         const formData = await request.formData();
-        console.log('📋 FormData recebido');
         
-        // Verificar se arquivo existe
         const file = formData.get('file');
         if (!file) {
-            console.log('❌ Nenhum arquivo no FormData');
             return NextResponse.json(
                 { error: 'Nenhum arquivo enviado' },
                 { status: 400 }
             );
         }
         
-        console.log('📁 Arquivo detectado:', file instanceof File ? file.name : 'unknown');
-        console.log('📤 Redirecionando upload para backend Python: https://email-classifier-backend-rxlb.onrender.com/api/upload');
-        
         const response = await fetch('https://email-classifier-backend-rxlb.onrender.com/api/upload', {
             method: 'POST',
             body: formData,
         });
 
-        console.log('📥 Resposta do upload:', response.status, response.statusText);
 
         if (!response.ok) {
             const errorText = await response.text();
@@ -45,7 +37,6 @@ export async function POST(request: NextRequest) {
         }
 
         const data = await response.json();
-        console.log('✅ Upload processado:', data);
         
         return NextResponse.json(data);
 
